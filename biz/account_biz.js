@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
-var Account=require('../models/account');
+var Account = require('../models/account');
 function AccountBiz() {
-    this.register = function (nick_name, mobile, password) {
+    mongoose.connect('mongodb://localhost/whathapp');
+    this.register = function (nick_name, mobile, password, callback) {
         if (!nick_name || nick_name.length < 0) {
             throw new Error('nick_name is required', -1);
         }
@@ -16,13 +17,30 @@ function AccountBiz() {
             mobile: mobile,
             password: password,
         });
-        mongoose.connect('mongodb://localhost/whathapp');
+
         account.save(function (err) {
             if (err) {
                 throw err;
             }
+            callback();
         });
     };
-};
+
+    this.login = function (mobile, password, callback) {
+        Account.findOne({mobile: mobile, password: password}, function (err, model) {
+            if (err) {
+                console.log(err);
+            }
+            if (model) {
+                model.password = null;
+            }
+            console.log(model);
+            callback(model);
+        });
+    };
+
+    this.logout = function (uid) {
+    };
+}
 
 module.exports = new AccountBiz();
