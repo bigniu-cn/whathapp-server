@@ -12,18 +12,29 @@ function AccountBiz() {
         if (!password || password.length < 0) {
             throw new Error('password is required', -1);
         }
-        var account = new Account({
-            nick_name: nick_name,
-            mobile: mobile,
-            password: password,
-        });
-
-        account.save(function (err) {
+        Account.findOne({mobile: mobile, password: password}, function (err, model) {
             if (err) {
                 throw err;
             }
-            callback();
+            if (model) {
+                throw new Error('手机号已经注册过,您可以找回密码,进行登录', -1);
+            }
+            var account = new Account({
+                nick_name: nick_name,
+                mobile: mobile,
+                password: password,
+            });
+
+            account.save(function (err) {
+                if (err) {
+                    throw err;
+                }
+                callback();
+            });
+
         });
+
+
     };
 
     this.login = function (mobile, password, callback) {
