@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 var Happen = mongoose.model('Happen',
     {
+        uid: String,
         title: String,
         content: String,
-        author_id: Number,
         media: Array,
         comment: Array
     });

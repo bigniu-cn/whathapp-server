@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var account = require('./routes/account');
 var users = require('./routes/users');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/whathapp');
 
 var app = express();
 

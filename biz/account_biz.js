@@ -1,7 +1,6 @@
-var mongoose = require('mongoose');
 var Account = require('../models/account');
+var User = require('../models/user');
 function AccountBiz() {
-    mongoose.connect('mongodb://localhost/whathapp');
     this.register = function (nick_name, mobile, password, callback) {
         if (!nick_name || nick_name.length < 0) {
             throw new Error('nick_name is required', -1);
@@ -19,22 +18,28 @@ function AccountBiz() {
             if (model) {
                 throw new Error('手机号已经注册过,您可以找回密码,进行登录', -1);
             }
-            var account = new Account({
+            var user = new User({
                 nick_name: nick_name,
                 mobile: mobile,
-                password: password,
             });
-
-            account.save(function (err) {
+            user.save(function (err) {
                 if (err) {
                     throw err;
                 }
-                callback();
+                var account = new Account({
+                    id: user.id,
+                    mobile: mobile,
+                    password: password,
+                });
+
+                account.save(function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    callback();
+                });
             });
-
         });
-
-
     };
 
     this.login = function (mobile, password, callback) {
