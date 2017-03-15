@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Account = mongoose.model('Account',
     {
-        nick_name: String,
+        uid: Number,
         mobile: String,
         password: String,
     });

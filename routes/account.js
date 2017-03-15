@@ -5,7 +5,7 @@ var AccountBiz = require('../biz/account_biz');
 /* GET 注册 */
 router.post('/register', function (req, res, next) {
     AccountBiz.register(req.param('nick_name'), req.param('mobile'), req.param('password'), function () {
-        res.json({success: 1});
+        res.json({errcode: 0});
     });
 
 });
@@ -13,10 +13,10 @@ router.post('/register', function (req, res, next) {
 router.post('/login', function (req, res, next) {
     AccountBiz.login(req.param('mobile'), req.param('password'), function (model) {
         if (!model) {
-            res.json({success: 0, msg: '账号或密码错误'});
+            res.json({errcode: 1, errmsg: '账号或密码错误'});
         }
         else {
-            res.json({success: 1, data: model});
+            res.json({errcode: 0, data: model});
         }
     });
 });
