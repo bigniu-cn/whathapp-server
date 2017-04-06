@@ -8,8 +8,9 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var account = require('./routes/account');
 var users = require('./routes/users');
+var happens = require('./routes/happens');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/whathapp');
+mongoose.connect('mongodb://localhost/whathapp');//TODO:系统启动时开启链接会有什么问题?
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/account', account);
 app.use('/users', users);
+app.use('/happens', happens);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
